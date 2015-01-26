@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import com.google.common.io.Files;
 import com.google.gson.Gson;
 import com.google.gson.JsonIOException;
 import com.google.gson.JsonSyntaxException;
@@ -18,6 +19,7 @@ import com.pacoworks.imprinter.model.Character;
 import com.pacoworks.imprinter.model.*;
 
 import java.io.*;
+import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -64,8 +66,8 @@ public class CharacterImprinter {
         effectVHolder = new EffectHolder();
         View holder = activity.findViewById(R.id.card_effect_include);
         effectVHolder.holder = holder;
-        effectVHolder.description = (TextView) holder.findViewById(R.id.effect_description);
-        effectVHolder.name = (TextView) holder.findViewById(R.id.effect_name);
+        effectVHolder.description = (TextView)holder.findViewById(R.id.effect_description);
+        effectVHolder.name = (TextView)holder.findViewById(R.id.effect_name);
         effectVHolder.name.setTypeface(casablanca, Typeface.BOLD);
         effectVHolder.name.setPaintFlags(effectVHolder.name.getPaintFlags()
                 | Paint.SUBPIXEL_TEXT_FLAG);
@@ -91,11 +93,9 @@ public class CharacterImprinter {
             TextView name = monsterVHolder.names.get(i);
             TextView life = monsterVHolder.lives.get(i);
             name.setTypeface(deutsch, Typeface.BOLD);
-            name.setPaintFlags(skillVHolder.name.getPaintFlags()
-                    | Paint.SUBPIXEL_TEXT_FLAG);
+            name.setPaintFlags(skillVHolder.name.getPaintFlags() | Paint.SUBPIXEL_TEXT_FLAG);
             life.setTypeface(deutsch, Typeface.BOLD);
-            life.setPaintFlags(life.getPaintFlags()
-                    | Paint.SUBPIXEL_TEXT_FLAG);
+            life.setPaintFlags(life.getPaintFlags() | Paint.SUBPIXEL_TEXT_FLAG);
         }
         monsterVHolder.description.setTypeface(casablanca, Typeface.BOLD);
         monsterVHolder.description.setPaintFlags(monsterVHolder.description.getPaintFlags()
@@ -149,7 +149,7 @@ public class CharacterImprinter {
 
     // PRINT
     // ////////////
-    public void printMonsters() throws IOException, JsonIOException, JsonSyntaxException {
+    public void printMonsters(String path) throws IOException, JsonIOException, JsonSyntaxException {
         InputStreamReader file = new InputStreamReader(activity.getAssets().open("monsters.json"));
         Monsters monsters = reader.fromJson(file, Monsters.class);
         monsterVHolder.holder.setDrawingCacheEnabled(true);
@@ -161,9 +161,9 @@ public class CharacterImprinter {
                 String lifeValue = "";
                 String nameValue = "";
                 if (i >= diff) {
-                    MosterRow mosterRow = monster.positions.get(i - diff);
-                    lifeValue = mosterRow.life + "";
-                    nameValue = mosterRow.name;
+                    MonsterRow monsterRow = monster.positions.get(i - diff);
+                    lifeValue = monsterRow.life + "";
+                    nameValue = monsterRow.name;
                 }
                 life.setText(lifeValue);
                 name.setText(nameValue);
@@ -178,7 +178,7 @@ public class CharacterImprinter {
         monsterVHolder.holder.setDrawingCacheEnabled(false);
     }
 
-    public void printEffects() throws IOException, JsonIOException, JsonSyntaxException {
+    public void printEffects(String path) throws IOException, JsonIOException, JsonSyntaxException {
         InputStreamReader file = new InputStreamReader(activity.getAssets().open("effects.json"));
         DungeonEffects effects = reader.fromJson(file, DungeonEffects.class);
         effectVHolder.holder.setDrawingCacheEnabled(true);
@@ -194,11 +194,31 @@ public class CharacterImprinter {
         effectVHolder.holder.setDrawingCacheEnabled(false);
     }
 
-    public void printCharacters() throws IOException, JsonIOException, JsonSyntaxException {
-        InputStreamReader file = new InputStreamReader(activity.getAssets().open("characters.json"));
-        Characters characters = reader.fromJson(file, Characters.class);
+    public void printCharacters(String uri) throws IOException, JsonIOException,
+            JsonSyntaxException {
+        // InputStreamReader file = new InputStreamReader(new FileInputStream(new File(uri)));
+        String content = Files.toString(new File(uri), Charset.defaultCharset());
+        String step1 = content
+                .replaceAll(
+                        "(.*) \\| (.*) \\((.*)\\)( \\[(.*)\\])?",
+                        "]\\},\n\\{ \"name\" : \"$1\", \"archetype\" : \"$2\", \"filename\": \"$5\",  \"initiative\": $3, \"skills\" : [");
+        String step2 = step1
+                .replaceAll("(..?)x (.*) -- (.*)( \\[(.*)\\])?",
+                        "{ \"filename\": \"$4\", \"name\" : \"$2\", \"description\" : \"$3\", \"quantity\" : $1 },");
+        String step3 = step2.replaceAll(",\\Z", "]}]}");
+        String step4 = step3.replaceAll("\\A\\]\\},\n", "{ \"characters\" : [");
+        /* Fuck you Android */
+        String sanitized = step4.replace("null", "");
+        Characters characters = reader.fromJson(sanitized, Characters.class);
         heroVHolder.holder.setDrawingCacheEnabled(true);
         for (Character character : characters.characters) {
+            /*
+             * Fuck you Android and GSON, this should come up during parsing but Android is not
+             * happy with new line searches, and GSON thinks it's still okay to create a null.
+             */
+            if (null == character.skills.get(character.skills.size() - 1)) {
+                character.skills.remove(character.skills.size() - 1);
+            }
             heroVHolder.name.setText(character.name);
             heroVHolder.archetype.setText(character.archetype);
             heroVHolder.initiative.setText(character.initiative + "");
@@ -246,14 +266,14 @@ public class CharacterImprinter {
         skillVHolder.holder.buildDrawingCache(true);
         Bitmap card = skillVHolder.holder.getDrawingCache();
         if (card != null) {
-            createBitmap(card, skill.getFilename(), "skills/" + parentFilename);
+            createBitmap(card, parentFilename + "_" + skill.getFilename(), "skills/"
+                    + parentFilename);
         }
         skillVHolder.holder.setDrawingCacheEnabled(false);
     }
 
     private void createBitmap(Bitmap card, String name, String folder) throws IOException {
-        String dir = Environment.getExternalStorageDirectory().toString() + "/CardImprinter/" + "/"
-                + folder + "/";
+        String dir = Environment.getExternalStorageDirectory().toString() + "/CardImprinter/" + folder + "/";
         File folderFile = new File(dir);
         folderFile.mkdirs();
         OutputStream fos = null;

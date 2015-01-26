@@ -1,6 +1,9 @@
 
 package com.pacoworks.imprinter;
 
+import android.app.Activity;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
@@ -8,28 +11,39 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
+import com.nononsenseapps.filepicker.FilePickerActivity;
 
 public class MainActivity extends ActionBarActivity {
+    private static final int CHARACTER_CODE = 852;
+
+    private static final int MONSTER_CODE = 456;
+
+    private static final int EFFECT_CODE = 159;
+
     private CharacterImprinter imprinter;
+
+    private Button characterButton;
+
+    private Button effectButton;
+
+    private Button monsterButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        final Button characterButton = (Button)findViewById(R.id.load_char_btn);
-        final Button effectButton = (Button)findViewById(R.id.load_dung_btn);
-        final Button monsterButton = (Button)findViewById(R.id.load_mns_btn);
+        characterButton = (Button)findViewById(R.id.load_char_btn);
+        effectButton = (Button)findViewById(R.id.load_dung_btn);
+        monsterButton = (Button)findViewById(R.id.load_mns_btn);
         imprinter = new CharacterImprinter(this);
         characterButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 try {
-                    characterButton.setEnabled(false);
-                    imprinter.printCharacters();
-                    characterButton.setEnabled(true);
+                    Intent i = new Intent(MainActivity.this, FilePickerActivity.class);
+                    startActivityForResult(i, CHARACTER_CODE);
                 } catch (Exception e) {
-                    characterButton.setEnabled(true);
-                    Toast.makeText(MainActivity.this, "Exception", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(MainActivity.this, "Exception " + e.getMessage(), Toast.LENGTH_SHORT).show();
                     e.printStackTrace();
                 }
             }
@@ -38,12 +52,10 @@ public class MainActivity extends ActionBarActivity {
             @Override
             public void onClick(View v) {
                 try {
-                    effectButton.setEnabled(false);
-                    imprinter.printEffects();
-                    effectButton.setEnabled(true);
+                    Intent i = new Intent(MainActivity.this, FilePickerActivity.class);
+                    startActivityForResult(i, EFFECT_CODE);
                 } catch (Exception e) {
-                    effectButton.setEnabled(true);
-                    Toast.makeText(MainActivity.this, "Exception", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(MainActivity.this, "Exception " + e.getMessage(), Toast.LENGTH_SHORT).show();
                     e.printStackTrace();
                 }
             }
@@ -52,16 +64,56 @@ public class MainActivity extends ActionBarActivity {
             @Override
             public void onClick(View v) {
                 try {
-                    monsterButton.setEnabled(false);
-                    imprinter.printMonsters();
-                    monsterButton.setEnabled(true);
+                    Intent i = new Intent(MainActivity.this, FilePickerActivity.class);
+                    startActivityForResult(i, MONSTER_CODE);
                 } catch (Exception e) {
-                    monsterButton.setEnabled(true);
-                    Toast.makeText(MainActivity.this, "Exception", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(MainActivity.this, "Exception " + e.getMessage(), Toast.LENGTH_SHORT).show();
                     e.printStackTrace();
                 }
             }
         });
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == CHARACTER_CODE && resultCode == Activity.RESULT_OK) {
+            Uri uri = data.getData();
+            try {
+                characterButton.setEnabled(false);
+                imprinter.printCharacters(uri.getPath());
+                characterButton.setEnabled(true);
+                Toast.makeText(MainActivity.this, "Done!", Toast.LENGTH_LONG).show();
+            } catch (Exception e) {
+                characterButton.setEnabled(true);
+                Toast.makeText(MainActivity.this, "Exception " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                e.printStackTrace();
+            }
+        } else if (requestCode == MONSTER_CODE && resultCode == Activity.RESULT_OK) {
+            Uri uri = data.getData();
+            try {
+                monsterButton.setEnabled(false);
+                imprinter.printMonsters(uri.getPath());
+                monsterButton.setEnabled(true);
+                Toast.makeText(MainActivity.this, "Done!", Toast.LENGTH_LONG).show();
+            } catch (Exception e) {
+                monsterButton.setEnabled(true);
+                Toast.makeText(MainActivity.this, "Exception " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                e.printStackTrace();
+            }
+        } else if (requestCode == EFFECT_CODE && resultCode == Activity.RESULT_OK) {
+            Uri uri = data.getData();
+            try {
+                effectButton.setEnabled(false);
+                imprinter.printEffects(uri.getPath());
+                effectButton.setEnabled(true);
+                Toast.makeText(MainActivity.this, "Done!", Toast.LENGTH_LONG).show();
+            } catch (Exception e) {
+                effectButton.setEnabled(true);
+                Toast.makeText(MainActivity.this, "Exception " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                e.printStackTrace();
+            }
+        }
     }
 
     @Override

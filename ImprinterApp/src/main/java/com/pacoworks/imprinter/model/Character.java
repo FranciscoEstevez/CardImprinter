@@ -25,7 +25,7 @@ public class Character extends Card {
     }
 
     @Override
-    public String alternativeFileName() {
-        return name.replaceAll("[^\\w\\s]","");
+    public String alternativeUnsanitizedFileName() {
+        return name;
     }
 }

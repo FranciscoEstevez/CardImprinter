@@ -13,11 +13,11 @@ public class Monster extends Card{
     public List<MonsterRow> positions = new ArrayList<>();
 
     @Override
-    public String alternativeFileName() {
+    public String alternativeUnsanitizedFileName() {
         StringBuilder builder = new StringBuilder();
         for (int i = 0; i < positions.size(); i++) {
             MonsterRow monster = positions.get(i);
-            builder.append(monster.name.replaceAll("[^\\w\\s]", ""));
+            builder.append(monster.name);
             if (i + 1 != positions.size() ){
                 builder.append("_");
             }

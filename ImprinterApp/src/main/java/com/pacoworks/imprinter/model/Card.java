@@ -10,11 +10,11 @@ abstract class Card {
     protected String filename;
 
     public String getFilename(){
-        if (TextUtils.isEmpty(filename)){
-            return alternativeFileName();
+        if (TextUtils.isEmpty(filename) || "null".equals(filename)){
+            return alternativeUnsanitizedFileName().toLowerCase().replaceAll(" ", "_").replaceAll("[^\\w\\s]","");
         }
         return filename;
     }
 
-    public abstract String alternativeFileName();
+    public abstract String alternativeUnsanitizedFileName();
 }
