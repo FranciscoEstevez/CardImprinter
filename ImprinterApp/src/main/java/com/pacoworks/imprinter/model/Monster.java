@@ -10,13 +10,18 @@ import java.util.List;
 public class Monster extends Card{
     public String description;
 
-    public List<MosterRow> positions = new ArrayList<>();
+    public List<MonsterRow> positions = new ArrayList<>();
 
     @Override
     public String alternativeFileName() {
-        if (positions.size() > 0){
-            return positions.get(positions.size() -1).name;
+        StringBuilder builder = new StringBuilder();
+        for (int i = 0; i < positions.size(); i++) {
+            MonsterRow monster = positions.get(i);
+            builder.append(monster.name.replaceAll("[^\\w\\s]", ""));
+            if (i + 1 != positions.size() ){
+                builder.append("_");
+            }
         }
-        return toString();
+        return builder.toString();
     }
 }

@@ -13,6 +13,6 @@ public class Skill extends Card {
 
     @Override
     public String alternativeFileName() {
-        return name;
+        return name.replaceAll("[^\\w\\s]","");
     }
 }
