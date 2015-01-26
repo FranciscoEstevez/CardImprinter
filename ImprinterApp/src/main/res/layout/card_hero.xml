@@ -1,0 +1,189 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+             android:layout_width="310px"
+             android:layout_height="202px">
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:src="@drawable/hero_plain"
+        android:scaleType="fitXY"/>
+
+    <TextView
+        android:id="@+id/hero_initiative"
+        android:layout_width="50px"
+        android:layout_height="50px"
+        android:layout_marginLeft="10px"
+        android:layout_marginTop="10px"
+        android:gravity="center"
+        android:maxLines="1"
+        android:textSize="32px"
+        android:text="0"/>
+
+    <TextView
+        android:id="@+id/hero_name"
+        android:layout_width="wrap_content"
+        android:layout_height="65px"
+        android:gravity="center_vertical"
+        android:layout_marginLeft="68px"
+        android:layout_marginTop="4px"
+        android:maxLines="2"
+        android:maxWidth="160px"
+        android:textSize="28px"
+        android:textColor="@android:color/black"
+        android:text="Long Hero Name Of Many Many Have We Crawled"/>
+
+    <TextView
+        android:id="@+id/hero_archetype"
+        android:layout_width="125px"
+        android:layout_height="32px"
+        android:gravity="center"
+        android:layout_marginLeft="9px"
+        android:layout_marginTop="75px"
+        android:textColor="@android:color/black"
+        android:maxLines="1"
+        android:maxWidth="130px"
+        android:textSize="24px"
+        android:text="Long Hero Name Of Many Many Have We Crawled"/>
+
+    <LinearLayout
+        android:id="@+id/hero_skills_holder"
+        android:layout_width="160px"
+        android:layout_height="120px"
+        android:layout_marginTop="75px"
+        android:layout_marginLeft="144px"
+        android:orientation="vertical"
+        android:paddingTop="2px"
+        android:paddingBottom="2px"
+        android:paddingRight="2px">
+    </LinearLayout>
+
+
+
+    <LinearLayout
+        android:layout_width="72px"
+        android:layout_height="72px"
+        android:layout_marginLeft="230px"
+        android:layout_marginTop="3px"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="20px"
+            android:layout_marginTop="2px"
+            android:layout_marginBottom="2px"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:id="@+id/hero_hp_1"
+                android:visibility="invisible"
+                android:layout_marginLeft="2px"
+                android:layout_marginRight="2px"
+                android:layout_width="20px"
+                android:layout_height="20px"
+                android:scaleType="fitXY"
+                android:src="@drawable/hp_dot"/>
+
+            <ImageView
+                android:id="@+id/hero_hp_2"
+                android:visibility="invisible"
+                android:layout_marginLeft="2px"
+                android:layout_marginRight="2px"
+                android:layout_width="20px"
+                android:layout_height="20px"
+                android:scaleType="fitXY"
+                android:src="@drawable/hp_dot"/>
+
+            <ImageView
+                android:id="@+id/hero_hp_3"
+                android:visibility="invisible"
+                android:layout_marginLeft="2px"
+                android:layout_marginRight="2px"
+                android:layout_width="20px"
+                android:layout_height="20px"
+                android:scaleType="fitXY"
+                android:src="@drawable/hp_dot"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="20px"
+            android:layout_marginTop="2px"
+            android:layout_marginBottom="2px"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:id="@+id/hero_hp_4"
+                android:visibility="invisible"
+                android:layout_marginLeft="2px"
+                android:layout_marginRight="2px"
+                android:layout_width="20px"
+                android:layout_height="20px"
+                android:scaleType="fitXY"
+                android:src="@drawable/hp_dot"/>
+
+            <ImageView
+                android:id="@+id/hero_hp_5"
+                android:visibility="invisible"
+                android:layout_marginLeft="2px"
+                android:layout_marginRight="2px"
+                android:layout_width="20px"
+                android:layout_height="20px"
+                android:scaleType="fitXY"
+                android:src="@drawable/hp_dot"/>
+
+            <ImageView
+                android:id="@+id/hero_hp_6"
+                android:visibility="invisible"
+                android:layout_marginLeft="2px"
+                android:layout_marginRight="2px"
+                android:layout_width="20px"
+                android:layout_height="20px"
+                android:scaleType="fitXY"
+                android:src="@drawable/hp_dot"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="20px"
+            android:layout_marginTop="2px"
+            android:layout_marginBottom="2px"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:id="@+id/hero_hp_7"
+                android:visibility="invisible"
+                android:layout_marginLeft="2px"
+                android:layout_marginRight="2px"
+                android:layout_width="20px"
+                android:layout_height="20px"
+                android:scaleType="fitXY"
+                android:src="@drawable/hp_dot"/>
+
+            <ImageView
+                android:id="@+id/hero_hp_8"
+                android:visibility="invisible"
+                android:layout_marginLeft="2px"
+                android:layout_marginRight="2px"
+                android:layout_width="20px"
+                android:layout_height="20px"
+                android:scaleType="fitXY"
+                android:src="@drawable/hp_dot"/>
+
+            <ImageView
+                android:id="@+id/hero_hp_9"
+                android:visibility="invisible"
+                android:layout_marginLeft="2px"
+                android:layout_marginRight="2px"
+                android:layout_width="20px"
+                android:layout_height="20px"
+                android:scaleType="fitXY"
+                android:src="@drawable/hp_dot"/>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</FrameLayout>

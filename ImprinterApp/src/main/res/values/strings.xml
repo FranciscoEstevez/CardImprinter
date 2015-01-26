@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">ImprinterApp</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">Settings</string>
+    <string name="load_characters">Characters</string>
+    <string name="load_monsters">Monsters</string>
+    <string name="load_dung">Effects</string>
+
+</resources>

@@ -1,0 +1,40 @@
+{
+  "monsters": [
+    {
+      "filename": "litchi",
+      "description": "Deals 1 damage to characters in columns first and second. If necromancer is alive, look into your dungeon deck for the first monster card and put it in play. Shuffle it afterwards.\n\nWhoever kills the Skeleton pack can automatically reshuffle their discard on their library, putting any card he wants on top of it.",
+      "positions": [
+        {
+          "name": "skeleton wlrkjañlksrgmña asfgmaslfñgk arglñkj nnaoij pafjgñl alkjljkklfgl.kj afgkljñlksfgñlksfg ",
+          "life": 2
+        },
+        {
+          "name": "skeleton rmghmkf jf  sisfg  poasfogj  afslkgjlkasfg asflñogñjlasf paifsglkasfg aosfjgklsfg asfgasfg",
+          "life": 2
+        },
+        {
+          "name": "skeleton LSKDGJJÑLKOIlñkjsd,fgñajfg,.asfgja-fgñmlkafg",
+          "life": 2
+        },
+        {
+          "name": "necromancer",
+          "life": 5
+        }
+      ]
+    },
+    {
+      "filename": "doggy",
+      "description": "Deals 2 damage to characters in column B.\n\nWhen the Giant Dog's Skeleton is killed, draw another dungeon card. Whoever kills the Giant Dog's Skeleton gains 1 extra action at the end of his round.",
+      "positions": [
+        {
+          "name": "this is the part where my body is supposed to be",
+          "life": 1
+        },
+        {
+          "name": "head mfop asuireo jmsdfg asdfgj oiu sfdg pfsglñ",
+          "life": 7
+        }
+      ]
+    }
+  ]
+}

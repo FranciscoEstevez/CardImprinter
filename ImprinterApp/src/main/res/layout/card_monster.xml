@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+             android:layout_width="202px"
+             android:layout_height="310px"
+             android:orientation="vertical"
+             android:paddingLeft="4px"
+             android:paddingRight="4px"
+             android:background="@drawable/monster_plain_v2">
+
+    <!--<TextView-->
+    <!--android:id="@+id/monster_name"-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:gravity="center"-->
+    <!--android:layout_marginTop="5px"-->
+    <!--android:maxLines="2"-->
+    <!--android:minLines="2"-->
+    <!--android:paddingLeft="4px"-->
+    <!--android:paddingRight="4px"-->
+    <!--android:textSize="14px"-->
+    <!--android:text="Long Hero Name Of Many Many Have We Crawled"-->
+    <!--android:textColor="@android:color/black"/>-->
+
+    <!--<ImageView-->
+    <!--android:layout_width="100px"-->
+    <!--android:layout_height="1px"-->
+    <!--android:layout_gravity="center"-->
+    <!--android:layout_marginTop="5px"-->
+    <!--android:layout_marginBottom="5px"-->
+    <!--android:background="@android:color/black"/>-->
+
+    <TextView
+        android:id="@+id/monster_description"
+        android:layout_width="match_parent"
+        android:layout_height="150px"
+        android:gravity="center"
+        android:layout_marginLeft="4px"
+        android:layout_marginRight="4px"
+        android:layout_marginTop="10px"
+        android:textSize="12px"
+        android:textColor="@android:color/black"
+        android:text="Long Hero Name Of Many Many Have We CraLong Hero Name Of Many Many Have We CraLong Hero Name Of Many Many Have We CraLong Hero Name Of Many Many Have We CraLong Hero Name Of Many Many Have We Crawled"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginTop="156px">
+
+        <TextView
+            android:id="@+id/monster_row_4"
+            android:layout_width="30px"
+            android:layout_height="30px"
+            android:layout_marginTop="10px"
+            android:gravity="center"
+            android:maxLines="1"
+            android:textSize="20px"
+            android:text="100"/>
+
+        <TextView
+            android:id="@+id/monster_row_4_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:alpha="0.5"
+            android:maxLines="2"
+            android:minLines="2"
+            android:layout_marginLeft="8px"
+            android:textSize="16px"
+            android:text="Long Hero Name Of Many Many Have We Crawled"
+            android:textColor="@android:color/black"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginTop="193px">
+
+        <TextView
+            android:id="@+id/monster_row_3"
+            android:layout_width="30px"
+            android:layout_height="30px"
+            android:layout_marginTop="10px"
+            android:gravity="center"
+            android:maxLines="1"
+            android:textSize="20px"
+            android:text="100"/>
+
+        <TextView
+            android:id="@+id/monster_row_3_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:alpha="0.5"
+            android:maxLines="2"
+            android:minLines="2"
+            android:layout_marginLeft="8px"
+            android:textSize="16px"
+            android:text="Long Hero Name Of Many Many Have We Crawled"
+            android:textColor="@android:color/black"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginTop="232px">
+
+        <TextView
+            android:id="@+id/monster_row_2"
+            android:layout_width="30px"
+            android:layout_height="30px"
+            android:layout_marginTop="7px"
+            android:gravity="center"
+            android:maxLines="1"
+            android:textSize="20px"
+            android:text="100"/>
+
+        <TextView
+            android:id="@+id/monster_row_2_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:alpha="0.5"
+            android:maxLines="2"
+            android:minLines="2"
+            android:layout_marginLeft="8px"
+            android:textSize="16px"
+            android:text="Long Hero Name Of Many Many Have We Crawled"
+            android:textColor="@android:color/black"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginTop="268px">
+
+        <TextView
+            android:id="@+id/monster_row_1"
+            android:layout_width="30px"
+            android:layout_height="30px"
+            android:layout_marginTop="10px"
+            android:gravity="center"
+            android:maxLines="1"
+            android:textSize="20px"
+            android:text="100"/>
+
+        <TextView
+            android:id="@+id/monster_row_1_name"
+            android:layout_width="130px"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:alpha="0.5"
+            android:maxLines="2"
+            android:minLines="2"
+            android:layout_marginLeft="8px"
+            android:textSize="16px"
+            android:text="Long Hero Name Of Many Many Have We Crawled"
+            android:textColor="@android:color/black"/>
+
+    </LinearLayout>
+
+
+</FrameLayout>

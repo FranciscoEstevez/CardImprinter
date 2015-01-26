@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+             android:layout_width="202px"
+             android:layout_height="310px"
+             android:orientation="vertical"
+             android:paddingLeft="8px"
+             android:paddingRight="8px"
+             android:background="@drawable/skill_plain">
+
+    <TextView
+        android:id="@+id/skill_name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:layout_marginTop="35px"
+        android:maxLines="2"
+        android:minLines="2"
+        android:textSize="22px"
+        android:text="Long Hero Name Of Many Many Have We Crawled"
+        android:textColor="@android:color/black"/>
+
+    <ImageView
+        android:layout_width="100px"
+        android:layout_height="1px"
+        android:layout_gravity="center"
+        android:layout_marginTop="5px"
+        android:layout_marginBottom="5px"
+        android:background="@android:color/black"/>
+
+    <TextView
+        android:id="@+id/skill_owner"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:maxLines="2"
+        android:minLines="2"
+        android:textSize="18px"
+        android:textColor="@android:color/black"
+        android:text="Long Hero Name Of Many Many Have We Crawled"/>
+
+    <ImageView
+        android:layout_width="100px"
+        android:layout_height="1px"
+        android:layout_gravity="center"
+        android:layout_marginTop="5px"
+        android:layout_marginBottom="5px"
+        android:background="@android:color/black"/>
+
+    <TextView
+        android:id="@+id/skill_description"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:layout_marginLeft="4px"
+        android:layout_marginRight="4px"
+        android:textSize="14px"
+        android:textColor="@android:color/black"
+        android:text="Long Hero Name Of Many Many Have We CraLong Hero Name Of Many Many Have We CraLong Hero Name Of Many Many Have We CraLong Hero Name Of Many Many Have We CraLong Hero Name Of Many Many Have We Crawled"/>
+
+</LinearLayout>

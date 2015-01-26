@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:orientation="horizontal"
+              android:layout_width="160px"
+              android:layout_height="wrap_content"
+              android:layout_marginBottom="2px">
+
+    <TextView
+        android:id="@+id/hero_skill_quantity"
+        android:layout_width="25px"
+        android:layout_height="25px"
+        android:gravity="center"
+        android:maxLines="1"
+        android:textSize="14px"
+        android:textColor="@android:color/black"
+        android:text="99"/>
+
+    <TextView
+        android:id="@+id/hero_skill_description"
+        android:layout_width="125px"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="5px"
+        android:textColor="@android:color/black"
+        android:textSize="14px"
+        android:text="Long Hero Name Of Many Many"/>
+
+</LinearLayout>

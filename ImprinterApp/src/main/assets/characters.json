@@ -1,0 +1,40 @@
+{
+  "characters": [
+    {
+      "filename": "pudge",
+      "name": "Pudge",
+      "archetype": "tank",
+      "initiative": 64,
+      "skills": [
+        {
+          "name": "rot",
+          "description": "Deal 1 damage to any character in Column A. Recover one of your Vampire cards belonging to this character from the trash. Gain 1 action.",
+          "quantity": 2
+        },
+        {
+          "name": "stuff",
+          "description": "Do stuff",
+          "quantity": 3
+        }
+      ]
+    },
+    {
+      "filename": "techies",
+      "name": "Hey You This is a test",
+      "archetype": "Nuker",
+      "initiative": 1,
+      "skills": [
+        {
+          "name": "hello!",
+          "description": "Deal 1 damage to 1 character in Column A or B. Gain 1 action.",
+          "quantity": 2
+        },
+        {
+          "name": "poof",
+          "description": "Trash X cards from your hand, up to 4. Techies deals 1 damage to a character in column A. Trash this card.",
+          "quantity": 1
+        }
+      ]
+    }
+  ]
+}
