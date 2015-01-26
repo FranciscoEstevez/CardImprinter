@@ -27,6 +27,22 @@ import java.util.List;
  * Created by Paco on 25/01/2015. See LICENSE.md
  */
 public class CharacterImprinter {
+    public static final String CHARACTER_REGEX = "(.*) \\| (.*) \\((.*)\\)( \\[(.*)\\])?";
+
+    public static final String CHARACTER_REPLACE = "]\\},\n\\{ \"name\" : \"$1\", \"archetype\" : \"$2\", \"filename\": \"$5\",  \"initiative\": $3, \"skills\" : [";
+
+    public static final String SKILL_REGEX = "(..?)x (.*) -- (.*)( \\[(.*)\\])?";
+
+    public static final String SKILL_REPLACE = "{ \"filename\": \"$4\", \"name\" : \"$2\", \"description\" : \"$3\", \"quantity\" : $1 },";
+
+    public static final String CHARACTERS_REGEX_BOTTOM = ",\\Z";
+
+    public static final String CHARACTERS_REGEX_BOTTOM_REPLACE = "]}]}";
+
+    public static final String CHARACTERS_REGEX_TOP = "\\A\\]\\},\n";
+
+    public static final String CHARACTERS_REGEX_TOP_REPLACE = "{ \"characters\" : [";
+
     private Activity activity;
 
     private HeroHolder heroVHolder;
@@ -196,17 +212,11 @@ public class CharacterImprinter {
 
     public void printCharacters(String uri) throws IOException, JsonIOException,
             JsonSyntaxException {
-        // InputStreamReader file = new InputStreamReader(new FileInputStream(new File(uri)));
         String content = Files.toString(new File(uri), Charset.defaultCharset());
-        String step1 = content
-                .replaceAll(
-                        "(.*) \\| (.*) \\((.*)\\)( \\[(.*)\\])?",
-                        "]\\},\n\\{ \"name\" : \"$1\", \"archetype\" : \"$2\", \"filename\": \"$5\",  \"initiative\": $3, \"skills\" : [");
-        String step2 = step1
-                .replaceAll("(..?)x (.*) -- (.*)( \\[(.*)\\])?",
-                        "{ \"filename\": \"$4\", \"name\" : \"$2\", \"description\" : \"$3\", \"quantity\" : $1 },");
-        String step3 = step2.replaceAll(",\\Z", "]}]}");
-        String step4 = step3.replaceAll("\\A\\]\\},\n", "{ \"characters\" : [");
+        String step1 = content.replaceAll(CHARACTER_REGEX, CHARACTER_REPLACE);
+        String step2 = step1.replaceAll(SKILL_REGEX, SKILL_REPLACE);
+        String step3 = step2.replaceAll(CHARACTERS_REGEX_BOTTOM, CHARACTERS_REGEX_BOTTOM_REPLACE);
+        String step4 = step3.replaceAll(CHARACTERS_REGEX_TOP, CHARACTERS_REGEX_TOP_REPLACE);
         /* Fuck you Android */
         String sanitized = step4.replace("null", "");
         Characters characters = reader.fromJson(sanitized, Characters.class);
@@ -273,7 +283,8 @@ public class CharacterImprinter {
     }
 
     private void createBitmap(Bitmap card, String name, String folder) throws IOException {
-        String dir = Environment.getExternalStorageDirectory().toString() + "/CardImprinter/" + folder + "/";
+        String dir = Environment.getExternalStorageDirectory().toString() + "/CardImprinter/"
+                + folder + "/";
         File folderFile = new File(dir);
         folderFile.mkdirs();
         OutputStream fos = null;

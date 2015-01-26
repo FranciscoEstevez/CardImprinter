@@ -79,9 +79,14 @@ public class MainActivity extends ActionBarActivity {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == CHARACTER_CODE && resultCode == Activity.RESULT_OK) {
             Uri uri = data.getData();
+            String path = uri.getPath();
+            if (!"dom".equals(path.substring(path.lastIndexOf(".") + 1))){
+                Toast.makeText(MainActivity.this, "Wrong file, must have extension .dom", Toast.LENGTH_SHORT).show();
+                return;
+            }
             try {
                 characterButton.setEnabled(false);
-                imprinter.printCharacters(uri.getPath());
+                imprinter.printCharacters(path);
                 characterButton.setEnabled(true);
                 Toast.makeText(MainActivity.this, "Done!", Toast.LENGTH_LONG).show();
             } catch (Exception e) {
@@ -91,9 +96,14 @@ public class MainActivity extends ActionBarActivity {
             }
         } else if (requestCode == MONSTER_CODE && resultCode == Activity.RESULT_OK) {
             Uri uri = data.getData();
+            String path = uri.getPath();
+            if (!"dom".equals(path.substring(path.lastIndexOf(".") + 1))){
+                Toast.makeText(MainActivity.this, "Wrong file, must have extension .dom", Toast.LENGTH_SHORT).show();
+                return;
+            }
             try {
                 monsterButton.setEnabled(false);
-                imprinter.printMonsters(uri.getPath());
+                imprinter.printMonsters(path);
                 monsterButton.setEnabled(true);
                 Toast.makeText(MainActivity.this, "Done!", Toast.LENGTH_LONG).show();
             } catch (Exception e) {
@@ -103,9 +113,14 @@ public class MainActivity extends ActionBarActivity {
             }
         } else if (requestCode == EFFECT_CODE && resultCode == Activity.RESULT_OK) {
             Uri uri = data.getData();
+            String path = uri.getPath();
+            if (!"dom".equals(path.substring(path.lastIndexOf(".") + 1))){
+                Toast.makeText(MainActivity.this, "Wrong file, must have extension .dom", Toast.LENGTH_SHORT).show();
+                return;
+            }
             try {
                 effectButton.setEnabled(false);
-                imprinter.printEffects(uri.getPath());
+                imprinter.printEffects(path);
                 effectButton.setEnabled(true);
                 Toast.makeText(MainActivity.this, "Done!", Toast.LENGTH_LONG).show();
             } catch (Exception e) {
