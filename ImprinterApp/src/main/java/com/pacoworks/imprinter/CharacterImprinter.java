@@ -31,9 +31,17 @@ public class CharacterImprinter {
 
     public static final String CHARACTER_REPLACE = "]\\},\n\\{ \"name\" : \"$1\", \"archetype\" : \"$2\", \"filename\": \"$5\",  \"initiative\": $3, \"skills\" : [";
 
-    public static final String SKILL_REGEX = "(..?)x (.*) -- (.*)( \\[(.*)\\])?";
+    public static final String SKILL_REGEX = "(..?)x (.*) -- ([^\\[\n]+)";
 
-    public static final String SKILL_REPLACE = "{ \"filename\": \"$5\", \"name\" : \"$2\", \"description\" : \"$3\", \"quantity\" : $1 },";
+    public static final String SKILL_REGEX2 = "@@@(\\[(.*)\\])";
+
+    public static final String SKILL_REGEX3 = "@@@";
+
+    public static final String SKILL_REPLACE2 = " \"filename\": \"$2\" },";
+
+    public static final String SKILL_REPLACE3 = " \"filename\": \"\" },";
+
+    public static final String SKILL_REPLACE = "{ \"name\" : \"$2\", \"description\" : \"$3\", \"quantity\" : $1, @@@";
 
     public static final String CHARACTERS_REGEX_BOTTOM = ",\\Z";
 
@@ -42,6 +50,26 @@ public class CharacterImprinter {
     public static final String CHARACTERS_REGEX_TOP = "\\A\\]\\},\n";
 
     public static final String CHARACTERS_REGEX_TOP_REPLACE = "{ \"characters\" : [";
+
+    public static final String EFFECTS_REGEX_1 = "(.*) -- ([^\\[\n]+)";
+
+    public static final String EFFECTS_SUBST_1 = "{ \"name\": \"$1\", \"description\": \"$2\", @@@";
+
+    public static final String EFFECTS_REGEX_2 = "@@@(\\[(.*)\\])";
+
+    public static final String EFFECTS_SUBST_2 = "\"filename\" : \"$2\" },";
+
+    public static final String EFFECTS_REGEX_3 = "@@@";
+
+    public static final String EFFECTS_SUBST_3 = "\"filename\" : \"\" },";
+
+    public static final String EFFECTS_REGEX_4 = ",\\Z";
+
+    public static final String EFFECTS_SUBST_4 = "]}";
+
+    public static final String EFFECTS_REGEX_5 = "\\A";
+
+    public static final String EFFECTS_SUBST_5 = "{ \"effects\" : [";
 
     private Activity activity;
 
@@ -196,11 +224,11 @@ public class CharacterImprinter {
 
     public void printEffects(String path) throws IOException, JsonIOException, JsonSyntaxException {
         String content = Files.toString(new File(path), Charset.defaultCharset());
-        String step1 = content.replaceAll("(.*) -- ([^\\[\n]+)", "{ \"name\": \"$1\", \"description\": \"$2\"__");
-        String step2 = step1.replaceAll("__(\\[(.*)\\])", ", \"filename\" : \"$2\" },");
-        String step3 = step2.replaceAll("__", ", \"filename\" : \"\" },");
-        String step4 = step3.replaceAll(",\\Z", "]}");
-        String step5 = step4.replaceAll("\\A", "{ \"effects\" : [");
+        String step1 = content.replaceAll(EFFECTS_REGEX_1, EFFECTS_SUBST_1);
+        String step2 = step1.replaceAll(EFFECTS_REGEX_2, EFFECTS_SUBST_2);
+        String step3 = step2.replaceAll(EFFECTS_REGEX_3, EFFECTS_SUBST_3);
+        String step4 = step3.replaceAll(EFFECTS_REGEX_4, EFFECTS_SUBST_4);
+        String step5 = step4.replaceAll(EFFECTS_REGEX_5, EFFECTS_SUBST_5);
         /* Fuck you Android */
         String sanitized = step5.replace("null", "");
         DungeonEffects effects = reader.fromJson(sanitized, DungeonEffects.class);
@@ -222,7 +250,9 @@ public class CharacterImprinter {
         String content = Files.toString(new File(path), Charset.defaultCharset());
         String step1 = content.replaceAll(CHARACTER_REGEX, CHARACTER_REPLACE);
         String step2 = step1.replaceAll(SKILL_REGEX, SKILL_REPLACE);
-        String step3 = step2.replaceAll(CHARACTERS_REGEX_BOTTOM, CHARACTERS_REGEX_BOTTOM_REPLACE);
+        String step2a = step2.replaceAll(SKILL_REGEX2, SKILL_REPLACE2);
+        String step2b = step2a.replaceAll(SKILL_REGEX3, SKILL_REPLACE3);
+        String step3 = step2b.replaceAll(CHARACTERS_REGEX_BOTTOM, CHARACTERS_REGEX_BOTTOM_REPLACE);
         String step4 = step3.replaceAll(CHARACTERS_REGEX_TOP, CHARACTERS_REGEX_TOP_REPLACE);
         /* Fuck you Android */
         String sanitized = step4.replace("null", "");
