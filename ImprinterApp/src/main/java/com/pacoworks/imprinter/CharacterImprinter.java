@@ -33,7 +33,7 @@ public class CharacterImprinter {
 
     public static final String SKILL_REGEX = "(..?)x (.*) -- (.*)( \\[(.*)\\])?";
 
-    public static final String SKILL_REPLACE = "{ \"filename\": \"$4\", \"name\" : \"$2\", \"description\" : \"$3\", \"quantity\" : $1 },";
+    public static final String SKILL_REPLACE = "{ \"filename\": \"$5\", \"name\" : \"$2\", \"description\" : \"$3\", \"quantity\" : $1 },";
 
     public static final String CHARACTERS_REGEX_BOTTOM = ",\\Z";
 
@@ -195,8 +195,15 @@ public class CharacterImprinter {
     }
 
     public void printEffects(String path) throws IOException, JsonIOException, JsonSyntaxException {
-        InputStreamReader file = new InputStreamReader(activity.getAssets().open("effects.json"));
-        DungeonEffects effects = reader.fromJson(file, DungeonEffects.class);
+        String content = Files.toString(new File(path), Charset.defaultCharset());
+        String step1 = content.replaceAll("(.*) -- ([^\\[\n]+)", "{ \"name\": \"$1\", \"description\": \"$2\"__");
+        String step2 = step1.replaceAll("__(\\[(.*)\\])", ", \"filename\" : \"$2\" },");
+        String step3 = step2.replaceAll("__", ", \"filename\" : \"\" },");
+        String step4 = step3.replaceAll(",\\Z", "]}");
+        String step5 = step4.replaceAll("\\A", "{ \"effects\" : [");
+        /* Fuck you Android */
+        String sanitized = step5.replace("null", "");
+        DungeonEffects effects = reader.fromJson(sanitized, DungeonEffects.class);
         effectVHolder.holder.setDrawingCacheEnabled(true);
         for (DungeonEffect effect : effects.effects) {
             effectVHolder.name.setText(effect.name);
@@ -210,9 +217,9 @@ public class CharacterImprinter {
         effectVHolder.holder.setDrawingCacheEnabled(false);
     }
 
-    public void printCharacters(String uri) throws IOException, JsonIOException,
+    public void printCharacters(String path) throws IOException, JsonIOException,
             JsonSyntaxException {
-        String content = Files.toString(new File(uri), Charset.defaultCharset());
+        String content = Files.toString(new File(path), Charset.defaultCharset());
         String step1 = content.replaceAll(CHARACTER_REGEX, CHARACTER_REPLACE);
         String step2 = step1.replaceAll(SKILL_REGEX, SKILL_REPLACE);
         String step3 = step2.replaceAll(CHARACTERS_REGEX_BOTTOM, CHARACTERS_REGEX_BOTTOM_REPLACE);
