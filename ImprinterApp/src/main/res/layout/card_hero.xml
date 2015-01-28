@@ -43,7 +43,7 @@
         android:textColor="@android:color/black"
         android:maxLines="1"
         android:maxWidth="130px"
-        android:textSize="24px"
+        android:textSize="14px"
         android:text="Long Hero Name Of Many Many Have We Crawled"/>
 
     <LinearLayout
