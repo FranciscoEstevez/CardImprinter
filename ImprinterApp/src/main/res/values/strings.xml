@@ -2,11 +2,6 @@
 <resources>
 
     <string name="app_name">ImprinterApp</string>
-    <string name="hello_world">Hello world!</string>
-    <string name="action_settings">Settings</string>
-    <string name="load_characters">Characters</string>
-    <string name="load_monsters">Monsters</string>
-    <string name="load_dung">Effects</string>
-    <string name="load_all">Load All</string>
+    <string name="load_all">Load YML entity definitions</string>
 
 </resources>
