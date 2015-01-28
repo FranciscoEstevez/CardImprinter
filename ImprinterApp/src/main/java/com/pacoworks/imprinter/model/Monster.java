@@ -1,27 +1,14 @@
+
 package com.pacoworks.imprinter.model;
 
-import java.util.ArrayList;
-import java.util.List;
-
 /**
- * Created by Paco on 25/01/2015.
- * See LICENSE.md
+ * Created by Paco on 25/01/2015. See LICENSE.md
  */
-public class Monster extends Card{
-    public String description;
+public class Monster {
+    public int life;
 
-    public List<MonsterRow> positions = new ArrayList<>();
+    public String name;
 
-    @Override
-    public String alternativeUnsanitizedFileName() {
-        StringBuilder builder = new StringBuilder();
-        for (int i = 0; i < positions.size(); i++) {
-            MonsterRow monster = positions.get(i);
-            builder.append(monster.name);
-            if (i + 1 != positions.size() ){
-                builder.append("_");
-            }
-        }
-        return builder.toString();
+    public Monster() {
     }
 }

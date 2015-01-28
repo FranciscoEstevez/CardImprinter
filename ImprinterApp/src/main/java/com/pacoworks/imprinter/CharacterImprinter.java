@@ -11,15 +11,19 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-import com.google.common.io.Files;
 import com.google.gson.Gson;
 import com.google.gson.JsonIOException;
 import com.google.gson.JsonSyntaxException;
 import com.pacoworks.imprinter.model.Character;
 import com.pacoworks.imprinter.model.*;
+import org.yaml.snakeyaml.DumperOptions;
+import org.yaml.snakeyaml.TypeDescription;
+import org.yaml.snakeyaml.Yaml;
+import org.yaml.snakeyaml.constructor.Constructor;
+import org.yaml.snakeyaml.nodes.Tag;
+import org.yaml.snakeyaml.representer.Representer;
 
 import java.io.*;
-import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -89,7 +93,9 @@ public class CharacterImprinter {
 
     private Typeface warpriest3D;
 
-    private final Gson reader;
+    private final Gson gson;
+
+    private final Yaml yaml;
 
     public CharacterImprinter(Activity activity) {
         this.activity = activity;
@@ -101,7 +107,37 @@ public class CharacterImprinter {
         setupSkill();
         setupMonster();
         setupEffect();
-        reader = new Gson();
+        Constructor constructor = new Constructor();
+        TypeDescription character = new TypeDescription(Character.class);
+        character.putListPropertyType("skills", Skill.class);
+        character.setTag("!character");
+        constructor.addTypeDescription(character);
+        TypeDescription monsterGroup = new TypeDescription(MonsterGroup.class);
+        monsterGroup.putListPropertyType("enemies", Monster.class);
+        monsterGroup.setTag("!monster");
+        constructor.addTypeDescription(monsterGroup);
+        TypeDescription singleMonster = new TypeDescription(Monster.class);
+        singleMonster.setTag("!single");
+        constructor.addTypeDescription(singleMonster);
+        TypeDescription effect = new TypeDescription(DungeonEffect.class);
+        effect.setTag("!effect");
+        constructor.addTypeDescription(effect);
+        TypeDescription skill = new TypeDescription(Skill.class);
+        skill.setTag("!skill");
+        constructor.addTypeDescription(skill);
+        Representer representer = new Representer();
+        representer.addClassTag(MonsterGroup.class, new Tag("!monster"));
+        representer.addClassTag(Character.class, new Tag("!character"));
+        representer.addClassTag(DungeonEffect.class, new Tag("!effect"));
+        representer.addClassTag(Skill.class, new Tag("!skill"));
+        representer.addClassTag(Monster.class, new Tag("!single"));
+        DumperOptions dumperOptions = new DumperOptions();
+        dumperOptions.setPrettyFlow(true);
+        dumperOptions.setIndent(4);
+        dumperOptions.setDefaultFlowStyle(DumperOptions.FlowStyle.BLOCK);
+        dumperOptions.setWidth(Integer.MAX_VALUE);
+        yaml = new Yaml(constructor, representer, dumperOptions);
+        gson = new Gson();
     }
 
     // SETUP
@@ -194,46 +230,60 @@ public class CharacterImprinter {
     // PRINT
     // ////////////
     public void printMonsters(String path) throws IOException, JsonIOException, JsonSyntaxException {
-        InputStreamReader file = new InputStreamReader(activity.getAssets().open("monsters.json"));
-        Monsters monsters = reader.fromJson(file, Monsters.class);
+        FileInputStream stream = new FileInputStream(path);
+        Iterable<Object> read = yaml.loadAll(stream);
+        ArrayList<MonsterGroup> monsters = new ArrayList<>();
+        for (Object o: read){
+            if (o instanceof MonsterGroup){
+                monsters.add((MonsterGroup) o);
+            }
+        }
         monsterVHolder.holder.setDrawingCacheEnabled(true);
-        for (Monster monster : monsters.monsters) {
-            int diff = monsterVHolder.lives.size() - monster.positions.size();
+        for (MonsterGroup monsterGroup : monsters) {
+            int diff = monsterVHolder.lives.size() - monsterGroup.enemies.size();
             for (int i = 0; i < monsterVHolder.lives.size(); i++) {
                 TextView life = monsterVHolder.lives.get(i);
                 TextView name = monsterVHolder.names.get(i);
                 String lifeValue = "";
                 String nameValue = "";
                 if (i >= diff) {
-                    MonsterRow monsterRow = monster.positions.get(i - diff);
-                    lifeValue = monsterRow.life + "";
-                    nameValue = monsterRow.name;
+                    Monster monster = monsterGroup.enemies.get(i - diff);
+                    lifeValue = monster.life + "";
+                    nameValue = monster.name;
                 }
                 life.setText(lifeValue);
                 name.setText(nameValue);
             }
-            monsterVHolder.description.setText(monster.description);
+            monsterVHolder.description.setText(monsterGroup.description);
             monsterVHolder.holder.buildDrawingCache();
             Bitmap card = monsterVHolder.holder.getDrawingCache();
             if (card != null) {
-                createBitmap(card, monster.getFilename(), "monsters");
+                createBitmap(card, monsterGroup.getFilename(), "monsters");
             }
         }
         monsterVHolder.holder.setDrawingCacheEnabled(false);
     }
 
     public void printEffects(String path) throws IOException, JsonIOException, JsonSyntaxException {
-        String content = Files.toString(new File(path), Charset.defaultCharset());
-        String step1 = content.replaceAll(EFFECTS_REGEX_1, EFFECTS_SUBST_1);
-        String step2 = step1.replaceAll(EFFECTS_REGEX_2, EFFECTS_SUBST_2);
-        String step3 = step2.replaceAll(EFFECTS_REGEX_3, EFFECTS_SUBST_3);
-        String step4 = step3.replaceAll(EFFECTS_REGEX_4, EFFECTS_SUBST_4);
-        String step5 = step4.replaceAll(EFFECTS_REGEX_5, EFFECTS_SUBST_5);
-        /* Fuck you Android */
-        String sanitized = step5.replace("null", "");
-        DungeonEffects effects = reader.fromJson(sanitized, DungeonEffects.class);
+//        String content = Files.toString(new File(path), Charset.defaultCharset());
+//        String step1 = content.replaceAll(EFFECTS_REGEX_1, EFFECTS_SUBST_1);
+//        String step2 = step1.replaceAll(EFFECTS_REGEX_2, EFFECTS_SUBST_2);
+//        String step3 = step2.replaceAll(EFFECTS_REGEX_3, EFFECTS_SUBST_3);
+//        String step4 = step3.replaceAll(EFFECTS_REGEX_4, EFFECTS_SUBST_4);
+//        String step5 = step4.replaceAll(EFFECTS_REGEX_5, EFFECTS_SUBST_5);
+//        /* Fuck you Android */
+//        String sanitized = step5.replace("null", "");
+//        DungeonEffects effects = gson.fromJson(sanitized, DungeonEffects.class);
+        FileInputStream stream = new FileInputStream(path);
+        Iterable<Object> read = yaml.loadAll(stream);
+        ArrayList<DungeonEffect> effects = new ArrayList<>();
+        for (Object o: read){
+            if (o instanceof DungeonEffect){
+                effects.add((DungeonEffect) o);
+            }
+        }
         effectVHolder.holder.setDrawingCacheEnabled(true);
-        for (DungeonEffect effect : effects.effects) {
+        for (DungeonEffect effect : effects) {
             effectVHolder.name.setText(effect.name);
             effectVHolder.description.setText(effect.description);
             effectVHolder.holder.buildDrawingCache();
@@ -247,18 +297,26 @@ public class CharacterImprinter {
 
     public void printCharacters(String path) throws IOException, JsonIOException,
             JsonSyntaxException {
-        String content = Files.toString(new File(path), Charset.defaultCharset());
-        String step1 = content.replaceAll(CHARACTER_REGEX, CHARACTER_REPLACE);
-        String step2 = step1.replaceAll(SKILL_REGEX, SKILL_REPLACE);
-        String step2a = step2.replaceAll(SKILL_REGEX2, SKILL_REPLACE2);
-        String step2b = step2a.replaceAll(SKILL_REGEX3, SKILL_REPLACE3);
-        String step3 = step2b.replaceAll(CHARACTERS_REGEX_BOTTOM, CHARACTERS_REGEX_BOTTOM_REPLACE);
-        String step4 = step3.replaceAll(CHARACTERS_REGEX_TOP, CHARACTERS_REGEX_TOP_REPLACE);
-        /* Fuck you Android */
-        String sanitized = step4.replace("null", "");
-        Characters characters = reader.fromJson(sanitized, Characters.class);
+//        String content = Files.toString(new File(path), Charset.defaultCharset());
+//        String step1 = content.replaceAll(CHARACTER_REGEX, CHARACTER_REPLACE);
+//        String step2 = step1.replaceAll(SKILL_REGEX, SKILL_REPLACE);
+//        String step2a = step2.replaceAll(SKILL_REGEX2, SKILL_REPLACE2);
+//        String step2b = step2a.replaceAll(SKILL_REGEX3, SKILL_REPLACE3);
+//        String step3 = step2b.replaceAll(CHARACTERS_REGEX_BOTTOM, CHARACTERS_REGEX_BOTTOM_REPLACE);
+//        String step4 = step3.replaceAll(CHARACTERS_REGEX_TOP, CHARACTERS_REGEX_TOP_REPLACE);
+//        /* Fuck you Android */
+//        String sanitized = step4.replace("null", "");
+//        Characters characters = gson.fromJson(sanitized, Characters.class);
+        FileInputStream stream = new FileInputStream(path);
+        Iterable<Object> read = yaml.loadAll(stream);
+        ArrayList<Character> characters = new ArrayList<>();
+        for (Object o: read){
+            if (o instanceof Character){
+                characters.add((Character) o);
+            }
+        }
         heroVHolder.holder.setDrawingCacheEnabled(true);
-        for (Character character : characters.characters) {
+        for (Character character : characters) {
             /*
              * Fuck you Android and GSON, this should come up during parsing but Android is not
              * happy with new line searches, and GSON thinks it's still okay to create a null.

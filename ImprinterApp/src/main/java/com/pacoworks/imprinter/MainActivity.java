@@ -43,7 +43,8 @@ public class MainActivity extends ActionBarActivity {
                     Intent i = new Intent(MainActivity.this, FilePickerActivity.class);
                     startActivityForResult(i, CHARACTER_CODE);
                 } catch (Exception e) {
-                    Toast.makeText(MainActivity.this, "Exception " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(MainActivity.this, "Exception " + e.getMessage(),
+                            Toast.LENGTH_SHORT).show();
                     e.printStackTrace();
                 }
             }
@@ -55,7 +56,8 @@ public class MainActivity extends ActionBarActivity {
                     Intent i = new Intent(MainActivity.this, FilePickerActivity.class);
                     startActivityForResult(i, EFFECT_CODE);
                 } catch (Exception e) {
-                    Toast.makeText(MainActivity.this, "Exception " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(MainActivity.this, "Exception " + e.getMessage(),
+                            Toast.LENGTH_SHORT).show();
                     e.printStackTrace();
                 }
             }
@@ -67,7 +69,8 @@ public class MainActivity extends ActionBarActivity {
                     Intent i = new Intent(MainActivity.this, FilePickerActivity.class);
                     startActivityForResult(i, MONSTER_CODE);
                 } catch (Exception e) {
-                    Toast.makeText(MainActivity.this, "Exception " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(MainActivity.this, "Exception " + e.getMessage(),
+                            Toast.LENGTH_SHORT).show();
                     e.printStackTrace();
                 }
             }
@@ -77,58 +80,113 @@ public class MainActivity extends ActionBarActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == CHARACTER_CODE && resultCode == Activity.RESULT_OK) {
+        if (resultCode == Activity.RESULT_OK) {
             Uri uri = data.getData();
             String path = uri.getPath();
-            if (!"dom".equals(path.substring(path.lastIndexOf(".") + 1))){
-                Toast.makeText(MainActivity.this, "Wrong file, must have extension .dom", Toast.LENGTH_SHORT).show();
-                return;
-            }
-            try {
-                characterButton.setEnabled(false);
-                imprinter.printCharacters(path);
-                characterButton.setEnabled(true);
-                Toast.makeText(MainActivity.this, "Done!", Toast.LENGTH_LONG).show();
-            } catch (Exception e) {
-                characterButton.setEnabled(true);
-                Toast.makeText(MainActivity.this, "Exception " + e.getMessage(), Toast.LENGTH_SHORT).show();
-                e.printStackTrace();
-            }
-        } else if (requestCode == MONSTER_CODE && resultCode == Activity.RESULT_OK) {
-            Uri uri = data.getData();
-            String path = uri.getPath();
-            if (!"dom".equals(path.substring(path.lastIndexOf(".") + 1))){
-                Toast.makeText(MainActivity.this, "Wrong file, must have extension .dom", Toast.LENGTH_SHORT).show();
-                return;
-            }
-            try {
-                monsterButton.setEnabled(false);
-                imprinter.printMonsters(path);
-                monsterButton.setEnabled(true);
-                Toast.makeText(MainActivity.this, "Done!", Toast.LENGTH_LONG).show();
-            } catch (Exception e) {
-                monsterButton.setEnabled(true);
-                Toast.makeText(MainActivity.this, "Exception " + e.getMessage(), Toast.LENGTH_SHORT).show();
-                e.printStackTrace();
-            }
-        } else if (requestCode == EFFECT_CODE && resultCode == Activity.RESULT_OK) {
-            Uri uri = data.getData();
-            String path = uri.getPath();
-            if (!"dom".equals(path.substring(path.lastIndexOf(".") + 1))){
-                Toast.makeText(MainActivity.this, "Wrong file, must have extension .dom", Toast.LENGTH_SHORT).show();
-                return;
-            }
-            try {
-                effectButton.setEnabled(false);
-                imprinter.printEffects(path);
-                effectButton.setEnabled(true);
-                Toast.makeText(MainActivity.this, "Done!", Toast.LENGTH_LONG).show();
-            } catch (Exception e) {
-                effectButton.setEnabled(true);
-                Toast.makeText(MainActivity.this, "Exception " + e.getMessage(), Toast.LENGTH_SHORT).show();
-                e.printStackTrace();
+            String extension = path.substring(path.lastIndexOf(".") + 1);
+            if ("yml".equals(extension)) {
+                if (requestCode == CHARACTER_CODE) {
+                    try {
+                        characterButton.setEnabled(false);
+                        imprinter.printCharacters(path);
+                        characterButton.setEnabled(true);
+                        Toast.makeText(MainActivity.this, "Done!", Toast.LENGTH_LONG).show();
+                    } catch (Exception e) {
+                        characterButton.setEnabled(true);
+                        Toast.makeText(MainActivity.this, "Exception " + e.getMessage(),
+                                Toast.LENGTH_SHORT).show();
+                        e.printStackTrace();
+                    }
+                } else if (requestCode == MONSTER_CODE) {
+                    try {
+                        monsterButton.setEnabled(false);
+                        imprinter.printMonsters(path);
+                        monsterButton.setEnabled(true);
+                        Toast.makeText(MainActivity.this, "Done!", Toast.LENGTH_LONG).show();
+                    } catch (Exception e) {
+                        monsterButton.setEnabled(true);
+                        Toast.makeText(MainActivity.this, "Exception " + e.getMessage(),
+                                Toast.LENGTH_SHORT).show();
+                        e.printStackTrace();
+                    }
+                } else if (requestCode == EFFECT_CODE) {
+                    try {
+                        effectButton.setEnabled(false);
+                        imprinter.printEffects(path);
+                        effectButton.setEnabled(true);
+                        Toast.makeText(MainActivity.this, "Done!", Toast.LENGTH_LONG).show();
+                    } catch (Exception e) {
+                        effectButton.setEnabled(true);
+                        Toast.makeText(MainActivity.this, "Exception " + e.getMessage(),
+                                Toast.LENGTH_SHORT).show();
+                        e.printStackTrace();
+                    }
+                }
+            } else {
+                Toast.makeText(MainActivity.this, "Wrong file, must have extension .dom",
+                        Toast.LENGTH_SHORT).show();
             }
         }
+        // if (requestCode == CHARACTER_CODE) {
+        // Uri uri = data.getData();
+        // String path = uri.getPath();
+        // if (!"dom".equals(path.substring(path.lastIndexOf(".") + 1))) {
+        // Toast.makeText(MainActivity.this, "Wrong file, must have extension .dom",
+        // Toast.LENGTH_SHORT).show();
+        // return;
+        // }
+        // try {
+        // characterButton.setEnabled(false);
+        // imprinter.printCharacters(path);
+        // characterButton.setEnabled(true);
+        // Toast.makeText(MainActivity.this, "Done!", Toast.LENGTH_LONG).show();
+        // } catch (Exception e) {
+        // characterButton.setEnabled(true);
+        // Toast.makeText(MainActivity.this, "Exception " + e.getMessage(), Toast.LENGTH_SHORT)
+        // .show();
+        // e.printStackTrace();
+        // }
+        // } else if (requestCode == MONSTER_CODE && resultCode == Activity.RESULT_OK) {
+        // Uri uri = data.getData();
+        // String path = uri.getPath();
+        // if (!"dom".equals(path.substring(path.lastIndexOf(".") + 1))) {
+        // Toast.makeText(MainActivity.this, "Wrong file, must have extension .dom",
+        // Toast.LENGTH_SHORT).show();
+        // return;
+        // }
+        // try {
+        // monsterButton.setEnabled(false);
+        // imprinter.printMonsters(path);
+        // monsterButton.setEnabled(true);
+        // Toast.makeText(MainActivity.this, "Done!", Toast.LENGTH_LONG).show();
+        // } catch (Exception e) {
+        // monsterButton.setEnabled(true);
+        // Toast.makeText(MainActivity.this, "Exception " + e.getMessage(), Toast.LENGTH_SHORT)
+        // .show();
+        // e.printStackTrace();
+        // }
+        // } else if (requestCode == EFFECT_CODE && resultCode == Activity.RESULT_OK) {
+        // Uri uri = data.getData();
+        // String path = uri.getPath();
+        // String extension = path.substring(path.lastIndexOf(".") + 1);
+        // if ("dom".equals(extension) || "json".equals(extension) || "yml".equals(extension)) {
+        // try {
+        // effectButton.setEnabled(false);
+        // imprinter.printEffects(path);
+        // effectButton.setEnabled(true);
+        // Toast.makeText(MainActivity.this, "Done!", Toast.LENGTH_LONG).show();
+        // } catch (Exception e) {
+        // effectButton.setEnabled(true);
+        // Toast.makeText(MainActivity.this, "Exception " + e.getMessage(),
+        // Toast.LENGTH_SHORT).show();
+        // e.printStackTrace();
+        // }
+        // } else {
+        // Toast.makeText(MainActivity.this, "Wrong file, must have extension .dom",
+        // Toast.LENGTH_SHORT).show();
+        // return;
+        // }
+        // }
     }
 
     @Override

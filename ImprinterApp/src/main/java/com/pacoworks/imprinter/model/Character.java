@@ -1,11 +1,11 @@
+
 package com.pacoworks.imprinter.model;
 
 import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by Paco on 25/01/2015.
- * See LICENSE.md
+ * Created by Paco on 25/01/2015. See LICENSE.md
  */
 public class Character extends Card {
     public String name;
@@ -16,9 +16,12 @@ public class Character extends Card {
 
     public List<Skill> skills = new ArrayList<>();
 
-    public int getHP(){
+    public Character() {
+    }
+
+    public int getHP() {
         int count = 0;
-        for (Skill skill: skills){
+        for (Skill skill : skills) {
             count += skill.quantity;
         }
         return count;
