@@ -61,7 +61,6 @@ public class MainActivity extends ActionBarActivity {
                                 loadButton.setEnabled(false);
                                 imprinter.printAll(path);
                                 loadButton.setEnabled(true);
-                                Toast.makeText(MainActivity.this, "Done!", Toast.LENGTH_LONG).show();
                             } catch (Exception e) {
                                 loadButton.setEnabled(true);
                                 Toast.makeText(MainActivity.this, "Exception " + e.getMessage(),
@@ -75,6 +74,7 @@ public class MainActivity extends ActionBarActivity {
                     }
                 }
             }
+            Toast.makeText(MainActivity.this, "Done!", Toast.LENGTH_LONG).show();
         }
     }
 
