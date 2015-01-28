@@ -20,6 +20,8 @@ public class MainActivity extends ActionBarActivity {
 
     private static final int EFFECT_CODE = 159;
 
+    private static final int LOAD_CODE = 753;
+
     private CharacterImprinter imprinter;
 
     private Button characterButton;
@@ -28,6 +30,8 @@ public class MainActivity extends ActionBarActivity {
 
     private Button monsterButton;
 
+    private Button loadButton;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -35,7 +39,21 @@ public class MainActivity extends ActionBarActivity {
         characterButton = (Button)findViewById(R.id.load_char_btn);
         effectButton = (Button)findViewById(R.id.load_dung_btn);
         monsterButton = (Button)findViewById(R.id.load_mns_btn);
+        loadButton = (Button)findViewById(R.id.load_all_btn);
         imprinter = new CharacterImprinter(this);
+        loadButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                try {
+                    Intent i = new Intent(MainActivity.this, FilePickerActivity.class);
+                    startActivityForResult(i, LOAD_CODE);
+                } catch (Exception e) {
+                    Toast.makeText(MainActivity.this, "Exception " + e.getMessage(),
+                            Toast.LENGTH_SHORT).show();
+                    e.printStackTrace();
+                }
+            }
+        });
         characterButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -85,7 +103,19 @@ public class MainActivity extends ActionBarActivity {
             String path = uri.getPath();
             String extension = path.substring(path.lastIndexOf(".") + 1);
             if ("yml".equals(extension)) {
-                if (requestCode == CHARACTER_CODE) {
+                if (requestCode == LOAD_CODE) {
+                    try {
+                        loadButton.setEnabled(false);
+                        imprinter.printAll(path);
+                        loadButton.setEnabled(true);
+                        Toast.makeText(MainActivity.this, "Done!", Toast.LENGTH_LONG).show();
+                    } catch (Exception e) {
+                        loadButton.setEnabled(true);
+                        Toast.makeText(MainActivity.this, "Exception " + e.getMessage(),
+                                Toast.LENGTH_SHORT).show();
+                        e.printStackTrace();
+                    }
+                } else if (requestCode == CHARACTER_CODE) {
                     try {
                         characterButton.setEnabled(false);
                         imprinter.printCharacters(path);

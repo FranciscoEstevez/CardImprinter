@@ -7,5 +7,6 @@
     <string name="load_characters">Characters</string>
     <string name="load_monsters">Monsters</string>
     <string name="load_dung">Effects</string>
+    <string name="load_all">Load All</string>
 
 </resources>
