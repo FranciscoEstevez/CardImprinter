@@ -11,6 +11,8 @@ public class Skill extends Card {
 
     public String description;
 
+    public String user;
+
     public Skill() {
     }
 

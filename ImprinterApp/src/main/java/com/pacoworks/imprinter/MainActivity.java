@@ -55,7 +55,7 @@ public class MainActivity extends ActionBarActivity {
                     Uri uri = clip.getItemAt(i).getUri();
                     String path = uri.getPath();
                     String extension = path.substring(path.lastIndexOf(".") + 1);
-                    if ("yml".equals(extension)) {
+                    if ("yml".equals(extension) || "yaml".equals(extension)) {
                         if (requestCode == LOAD_CODE) {
                             try {
                                 loadButton.setEnabled(false);

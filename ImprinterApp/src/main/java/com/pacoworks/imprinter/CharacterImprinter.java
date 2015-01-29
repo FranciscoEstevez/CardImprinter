@@ -99,10 +99,14 @@ public class CharacterImprinter {
         deutsch = Typeface.createFromAsset(activity.getAssets(), "deutsch.ttf");
         warpriest = Typeface.createFromAsset(activity.getAssets(), "warpriest.ttf");
         warpriest3D = Typeface.createFromAsset(activity.getAssets(), "warpriest3d.ttf");
-        setupHero();
-        setupSkill();
-        setupMonster();
-        setupEffect();
+        heroVHolder = setupHero();
+        skillVHolder = setupSkill();
+        monsterVHolder = setupMonster();
+        effectVHolder = setupEffect();
+        this.yaml = setupYaml();
+    }
+
+    private Yaml setupYaml() {
         Constructor constructor = new Constructor();
         TypeDescription character = new TypeDescription(Character.class);
         character.putListPropertyType("skills", Skill.class);
@@ -121,24 +125,28 @@ public class CharacterImprinter {
         TypeDescription skill = new TypeDescription(Skill.class);
         skill.setTag("!skill");
         constructor.addTypeDescription(skill);
+        TypeDescription item = new TypeDescription(Item.class);
+        item.setTag("!item");
+        constructor.addTypeDescription(item);
         Representer representer = new Representer();
         representer.addClassTag(MonsterGroup.class, new Tag("!monster"));
         representer.addClassTag(Character.class, new Tag("!character"));
         representer.addClassTag(Effect.class, new Tag("!effect"));
         representer.addClassTag(Skill.class, new Tag("!skill"));
         representer.addClassTag(Monster.class, new Tag("!single"));
+        representer.addClassTag(Item.class, new Tag("!item"));
         DumperOptions dumperOptions = new DumperOptions();
         dumperOptions.setPrettyFlow(true);
         dumperOptions.setIndent(4);
         dumperOptions.setDefaultFlowStyle(DumperOptions.FlowStyle.BLOCK);
         dumperOptions.setWidth(Integer.MAX_VALUE);
-        yaml = new Yaml(constructor, representer, dumperOptions);
+        return new Yaml(constructor, representer, dumperOptions);
     }
 
     // SETUP
     // ////////////
-    private void setupEffect() {
-        effectVHolder = new EffectHolder();
+    private EffectHolder setupEffect() {
+        EffectHolder effectVHolder = new EffectHolder();
         View holder = activity.findViewById(R.id.card_effect_include);
         effectVHolder.holder = holder;
         effectVHolder.description = (TextView)holder.findViewById(R.id.effect_description);
@@ -149,10 +157,11 @@ public class CharacterImprinter {
         effectVHolder.description.setTypeface(casablanca, Typeface.BOLD);
         effectVHolder.description.setPaintFlags(effectVHolder.description.getPaintFlags()
                 | Paint.SUBPIXEL_TEXT_FLAG);
+        return effectVHolder;
     }
 
-    private void setupMonster() {
-        monsterVHolder = new MonsterHolder();
+    private MonsterHolder setupMonster() {
+        MonsterHolder monsterVHolder = new MonsterHolder();
         View holder = activity.findViewById(R.id.card_monster_include);
         monsterVHolder.holder = holder;
         monsterVHolder.description = (TextView)holder.findViewById(R.id.monster_description);
@@ -175,10 +184,11 @@ public class CharacterImprinter {
         monsterVHolder.description.setTypeface(casablanca, Typeface.BOLD);
         monsterVHolder.description.setPaintFlags(monsterVHolder.description.getPaintFlags()
                 | Paint.SUBPIXEL_TEXT_FLAG);
+        return monsterVHolder;
     }
 
-    private void setupSkill() {
-        skillVHolder = new SkillHolder();
+    private SkillHolder setupSkill() {
+        SkillHolder skillVHolder = new SkillHolder();
         View holder = activity.findViewById(R.id.card_skill_include);
         skillVHolder.holder = holder;
         skillVHolder.description = (TextView)holder.findViewById(R.id.skill_description);
@@ -193,10 +203,11 @@ public class CharacterImprinter {
         skillVHolder.owner.setTypeface(deutsch, Typeface.BOLD);
         skillVHolder.owner.setPaintFlags(skillVHolder.owner.getPaintFlags()
                 | Paint.SUBPIXEL_TEXT_FLAG);
+        return skillVHolder;
     }
 
-    private void setupHero() {
-        heroVHolder = new HeroHolder();
+    private HeroHolder setupHero() {
+        HeroHolder heroVHolder = new HeroHolder();
         View holder = activity.findViewById(R.id.card_hero_include);
         heroVHolder.holder = holder;
         heroVHolder.archetype = (TextView)holder.findViewById(R.id.hero_archetype);
@@ -220,6 +231,7 @@ public class CharacterImprinter {
                 | Paint.SUBPIXEL_TEXT_FLAG);
         heroVHolder.archetype.setPaintFlags(heroVHolder.archetype.getPaintFlags()
                 | Paint.SUBPIXEL_TEXT_FLAG);
+        return heroVHolder;
     }
 
     private void printMonster(MonsterGroup monsterGroup) throws IOException {
@@ -242,7 +254,7 @@ public class CharacterImprinter {
         monsterVHolder.holder.buildDrawingCache();
         Bitmap card = monsterVHolder.holder.getDrawingCache();
         if (card != null) {
-            createBitmap(card, monsterGroup.getFilename(), "monsters");
+            createBitmap(card, "monster_" + monsterGroup.getFilename(), "monsters");
         }
         monsterVHolder.holder.setDrawingCacheEnabled(false);
     }
@@ -270,7 +282,7 @@ public class CharacterImprinter {
             quantity.setText(skill.quantity + "");
             description.setText(skill.name);
             heroVHolder.skillsHolder.addView(skillView);
-            printSkill(character.name, character.archetype, character.getFilename(), skill);
+            printSkill(character.name + " · " + character.archetype, character.getFilename(), skill);
         }
         heroVHolder.holder.measure(View.MeasureSpec.makeMeasureSpec(310, View.MeasureSpec.EXACTLY),
                 View.MeasureSpec.makeMeasureSpec(202, View.MeasureSpec.EXACTLY));
@@ -291,22 +303,35 @@ public class CharacterImprinter {
         effectVHolder.holder.buildDrawingCache();
         Bitmap card = effectVHolder.holder.getDrawingCache();
         if (card != null) {
-            createBitmap(card, effect.getFilename(), "effects");
+            createBitmap(card, "effect_" + effect.getFilename(), "effects");
         }
         effectVHolder.holder.setDrawingCacheEnabled(false);
     }
 
-    private void printSkill(String owner, String archetype, String parentFilename, Skill skill)
+    private void printSkill(String userName, String userFilename, Skill skill)
             throws IOException {
         skillVHolder.holder.setDrawingCacheEnabled(true);
         skillVHolder.description.setText(skill.description);
         skillVHolder.name.setText(skill.name);
-        skillVHolder.owner.setText(owner + " · " + archetype);
+        skillVHolder.owner.setText(userName);
         skillVHolder.holder.buildDrawingCache(true);
         Bitmap card = skillVHolder.holder.getDrawingCache();
         if (card != null) {
-            createBitmap(card, parentFilename + "_" + skill.getFilename(), "skills/"
-                    + parentFilename);
+            createBitmap(card, userFilename + "_" + skill.getFilename(), "skills/" + userFilename);
+        }
+        skillVHolder.holder.setDrawingCacheEnabled(false);
+    }
+
+    private void printItem(Item item)
+            throws IOException {
+        skillVHolder.holder.setDrawingCacheEnabled(true);
+        skillVHolder.description.setText(item.description);
+        skillVHolder.name.setText(item.name);
+        skillVHolder.owner.setText(item.user);
+        skillVHolder.holder.buildDrawingCache(true);
+        Bitmap card = skillVHolder.holder.getDrawingCache();
+        if (card != null) {
+            createBitmap(card, "item_" + item.getFilename(), "items");
         }
         skillVHolder.holder.setDrawingCacheEnabled(false);
     }
@@ -337,6 +362,9 @@ public class CharacterImprinter {
                 printCharacter((Character)o);
             } else if (o instanceof Effect) {
                 printEffect((Effect)o);
+            } else if (o instanceof Item){
+                Item item = (Item) o;
+                printItem(item);
             }
         }
     }
@@ -380,6 +408,20 @@ public class CharacterImprinter {
         }
         for (Character character : characters) {
             printCharacter(character);
+        }
+    }
+
+    public void printItems(String path) throws IOException, YAMLException {
+        FileInputStream stream = new FileInputStream(path);
+        Iterable<Object> read = yaml.loadAll(stream);
+        ArrayList<Item> items = new ArrayList<>();
+        for (Object o : read) {
+            if (o instanceof Item) {
+                items.add((Item) o);
+            }
+        }
+        for (Item item : items) {
+            printItem(item);
         }
     }
 
