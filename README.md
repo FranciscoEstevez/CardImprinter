@@ -1,5 +1,9 @@
 # CardImprinter
-Asset baker for gamedev project using Android's layout framework because I don't know better
+Asset baker for gamedev project using Android's layout framework because I don't know better.
+
+Huge imprinter class and general code ugliness acknowledged.
+
+Sizes in pixels are actually intended to achieve correct outputs.
 
 ===============================
 
