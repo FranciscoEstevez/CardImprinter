@@ -1,7 +1,7 @@
 # CardImprinter
 Q&D asset baker for gamedev project using Android's layout framework because I don't know better.
 
-Huge imprinter class and general code ugliness acknowledged.
+Huge imprinter class and general code ugliness acknowledged. Including the UI block.
 
 Sizes in pixels are actually intended to achieve correct outputs.
 
