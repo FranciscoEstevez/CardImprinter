@@ -29,50 +29,6 @@ import java.util.List;
  * Created by Paco on 25/01/2015. See LICENSE.md
  */
 public class CharacterImprinter {
-    public static final String CHARACTER_REGEX = "(.*) \\| (.*) \\((.*)\\)( \\[(.*)\\])?";
-
-    public static final String CHARACTER_REPLACE = "]\\},\n\\{ \"name\" : \"$1\", \"archetype\" : \"$2\", \"filename\": \"$5\",  \"initiative\": $3, \"skills\" : [";
-
-    public static final String SKILL_REGEX = "(..?)x (.*) -- ([^\\[\n]+)";
-
-    public static final String SKILL_REGEX2 = "@@@(\\[(.*)\\])";
-
-    public static final String SKILL_REGEX3 = "@@@";
-
-    public static final String SKILL_REPLACE2 = " \"filename\": \"$2\" },";
-
-    public static final String SKILL_REPLACE3 = " \"filename\": \"\" },";
-
-    public static final String SKILL_REPLACE = "{ \"name\" : \"$2\", \"description\" : \"$3\", \"quantity\" : $1, @@@";
-
-    public static final String CHARACTERS_REGEX_BOTTOM = ",\\Z";
-
-    public static final String CHARACTERS_REGEX_BOTTOM_REPLACE = "]}]}";
-
-    public static final String CHARACTERS_REGEX_TOP = "\\A\\]\\},\n";
-
-    public static final String CHARACTERS_REGEX_TOP_REPLACE = "{ \"characters\" : [";
-
-    public static final String EFFECTS_REGEX_1 = "(.*) -- ([^\\[\n]+)";
-
-    public static final String EFFECTS_SUBST_1 = "{ \"name\": \"$1\", \"description\": \"$2\", @@@";
-
-    public static final String EFFECTS_REGEX_2 = "@@@(\\[(.*)\\])";
-
-    public static final String EFFECTS_SUBST_2 = "\"filename\" : \"$2\" },";
-
-    public static final String EFFECTS_REGEX_3 = "@@@";
-
-    public static final String EFFECTS_SUBST_3 = "\"filename\" : \"\" },";
-
-    public static final String EFFECTS_REGEX_4 = ",\\Z";
-
-    public static final String EFFECTS_SUBST_4 = "]}";
-
-    public static final String EFFECTS_REGEX_5 = "\\A";
-
-    public static final String EFFECTS_SUBST_5 = "{ \"effects\" : [";
-
     private Activity activity;
 
     private HeroHolder heroVHolder;
@@ -83,13 +39,13 @@ public class CharacterImprinter {
 
     private EffectHolder effectVHolder;
 
-    private Typeface casablanca;
+    private final Typeface casablanca;
 
-    private Typeface deutsch;
+    private final Typeface deutsch;
 
-    private Typeface warpriest;
+    private final Typeface warpriest;
 
-    private Typeface warpriest3D;
+    private final Typeface warpriest3D;
 
     private final Yaml yaml;
 
@@ -103,7 +59,7 @@ public class CharacterImprinter {
         skillVHolder = setupSkill();
         monsterVHolder = setupMonster();
         effectVHolder = setupEffect();
-        this.yaml = setupYaml();
+        yaml = setupYaml();
     }
 
     private Yaml setupYaml() {
@@ -308,8 +264,7 @@ public class CharacterImprinter {
         effectVHolder.holder.setDrawingCacheEnabled(false);
     }
 
-    private void printSkill(String userName, String userFilename, Skill skill)
-            throws IOException {
+    private void printSkill(String userName, String userFilename, Skill skill) throws IOException {
         skillVHolder.holder.setDrawingCacheEnabled(true);
         skillVHolder.description.setText(skill.description);
         skillVHolder.name.setText(skill.name);
@@ -318,12 +273,12 @@ public class CharacterImprinter {
         Bitmap card = skillVHolder.holder.getDrawingCache();
         if (card != null) {
             createBitmap(card, userFilename + "_" + skill.getFilename(), "skills/" + userFilename);
+            createBitmap(card, userFilename + "_" + skill.getFilename(), "skills_dump");
         }
         skillVHolder.holder.setDrawingCacheEnabled(false);
     }
 
-    private void printItem(Item item)
-            throws IOException {
+    private void printItem(Item item) throws IOException {
         skillVHolder.holder.setDrawingCacheEnabled(true);
         skillVHolder.description.setText(item.description);
         skillVHolder.name.setText(item.name);
@@ -337,17 +292,26 @@ public class CharacterImprinter {
     }
 
     private void createBitmap(Bitmap card, String name, String folder) throws IOException {
-        String dir = Environment.getExternalStorageDirectory().toString() + "/CardImprinter/"
-                + folder + "/";
-        File folderFile = new File(dir);
-        folderFile.mkdirs();
         OutputStream fos = null;
-        File output = new File(dir, name + ".png");
-        fos = new FileOutputStream(output);
-        BufferedOutputStream bos = new BufferedOutputStream(fos);
-        card.compress(Bitmap.CompressFormat.PNG, 100, bos);
-        bos.flush();
-        bos.close();
+        BufferedOutputStream bos = null;
+        try {
+            String dir = Environment.getExternalStorageDirectory().toString() + "/CardImprinter/"
+                    + folder + "/";
+            File folderFile = new File(dir);
+            folderFile.mkdirs();
+            File output = new File(dir, name + ".png");
+            fos = new FileOutputStream(output);
+            bos = new BufferedOutputStream(fos);
+            card.compress(Bitmap.CompressFormat.PNG, 100, bos);
+        } finally {
+            if (fos != null) {
+                fos.close();
+            }
+            if (bos != null) {
+                bos.flush();
+                bos.close();
+            }
+        }
     }
 
     // PRINT
@@ -362,8 +326,8 @@ public class CharacterImprinter {
                 printCharacter((Character)o);
             } else if (o instanceof Effect) {
                 printEffect((Effect)o);
-            } else if (o instanceof Item){
-                Item item = (Item) o;
+            } else if (o instanceof Item) {
+                Item item = (Item)o;
                 printItem(item);
             }
         }
@@ -417,7 +381,7 @@ public class CharacterImprinter {
         ArrayList<Item> items = new ArrayList<>();
         for (Object o : read) {
             if (o instanceof Item) {
-                items.add((Item) o);
+                items.add((Item)o);
             }
         }
         for (Item item : items) {
@@ -425,7 +389,7 @@ public class CharacterImprinter {
         }
     }
 
-    private class HeroHolder {
+    private static class HeroHolder {
         private View holder;
 
         private TextView initiative;
@@ -439,7 +403,7 @@ public class CharacterImprinter {
         private ViewGroup skillsHolder;
     }
 
-    private class SkillHolder {
+    private static class SkillHolder {
         private View holder;
 
         private TextView description;
@@ -449,7 +413,7 @@ public class CharacterImprinter {
         public TextView owner;
     }
 
-    private class MonsterHolder {
+    private static class MonsterHolder {
         private View holder;
 
         private TextView description;
@@ -459,7 +423,7 @@ public class CharacterImprinter {
         private List<TextView> names = new ArrayList<>();
     }
 
-    private class EffectHolder {
+    private static class EffectHolder {
         private View holder;
 
         private TextView description;
