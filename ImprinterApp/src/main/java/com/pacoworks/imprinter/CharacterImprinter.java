@@ -333,62 +333,6 @@ public class CharacterImprinter {
         }
     }
 
-    public void printMonsters(String path) throws IOException, YAMLException {
-        FileInputStream stream = new FileInputStream(path);
-        Iterable<Object> read = yaml.loadAll(stream);
-        ArrayList<MonsterGroup> monsters = new ArrayList<>();
-        for (Object o : read) {
-            if (o instanceof MonsterGroup) {
-                monsters.add((MonsterGroup)o);
-            }
-        }
-        for (MonsterGroup monsterGroup : monsters) {
-            printMonster(monsterGroup);
-        }
-    }
-
-    public void printEffects(String path) throws IOException, YAMLException {
-        FileInputStream stream = new FileInputStream(path);
-        Iterable<Object> read = yaml.loadAll(stream);
-        ArrayList<Effect> effects = new ArrayList<>();
-        for (Object o : read) {
-            if (o instanceof Effect) {
-                effects.add((Effect)o);
-            }
-        }
-        for (Effect effect : effects) {
-            printEffect(effect);
-        }
-    }
-
-    public void printCharacters(String path) throws IOException, YAMLException {
-        FileInputStream stream = new FileInputStream(path);
-        Iterable<Object> read = yaml.loadAll(stream);
-        ArrayList<Character> characters = new ArrayList<>();
-        for (Object o : read) {
-            if (o instanceof Character) {
-                characters.add((Character)o);
-            }
-        }
-        for (Character character : characters) {
-            printCharacter(character);
-        }
-    }
-
-    public void printItems(String path) throws IOException, YAMLException {
-        FileInputStream stream = new FileInputStream(path);
-        Iterable<Object> read = yaml.loadAll(stream);
-        ArrayList<Item> items = new ArrayList<>();
-        for (Object o : read) {
-            if (o instanceof Item) {
-                items.add((Item)o);
-            }
-        }
-        for (Item item : items) {
-            printItem(item);
-        }
-    }
-
     private static class HeroHolder {
         private View holder;
 

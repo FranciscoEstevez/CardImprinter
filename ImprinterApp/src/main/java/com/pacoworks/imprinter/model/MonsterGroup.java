@@ -16,7 +16,7 @@ public class MonsterGroup extends Card {
     }
 
     @Override
-    public String alternativeUnsanitizedFileName() {
+    protected String alternativeUnsanitizedFileName() {
         StringBuilder builder = new StringBuilder();
         for (int i = 0; i < enemies.size(); i++) {
             Monster monster = enemies.get(i);

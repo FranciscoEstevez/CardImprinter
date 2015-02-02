@@ -28,7 +28,7 @@ public class Character extends Card {
     }
 
     @Override
-    public String alternativeUnsanitizedFileName() {
+    protected String alternativeUnsanitizedFileName() {
         return name;
     }
 }

@@ -17,5 +17,5 @@ abstract class Card {
         return filename;
     }
 
-    public abstract String alternativeUnsanitizedFileName();
+    protected abstract String alternativeUnsanitizedFileName();
 }

@@ -17,7 +17,7 @@ public class Skill extends Card {
     }
 
     @Override
-    public String alternativeUnsanitizedFileName() {
+    protected String alternativeUnsanitizedFileName() {
         return name;
     }
 }
