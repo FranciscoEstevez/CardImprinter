@@ -18,6 +18,7 @@ import com.nononsenseapps.filepicker.FilePickerActivity;
 public class MainActivity extends ActionBarActivity {
 
     private static final int LOAD_CODE = 753;
+    public static final String YAML = "yaml";
 
     private CharacterImprinter imprinter;
 
@@ -55,7 +56,7 @@ public class MainActivity extends ActionBarActivity {
                     Uri uri = clip.getItemAt(i).getUri();
                     String path = uri.getPath();
                     String extension = path.substring(path.lastIndexOf(".") + 1);
-                    if ("yml".equals(extension) || "yaml".equals(extension)) {
+                    if ("yml".equals(extension) || YAML.equals(extension)) {
                         if (requestCode == LOAD_CODE) {
                             try {
                                 loadButton.setEnabled(false);
