@@ -18,7 +18,9 @@ Art Director: Kate Irwin
 
 http://commons.wikimedia.org/wiki/User:Deevad
 
-For all code and non-licensed materials:
+===============================
+
+For code and non-licensed materials:
 
 Copyright 2014 pakoito
 
